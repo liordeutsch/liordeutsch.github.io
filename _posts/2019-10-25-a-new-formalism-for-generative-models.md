@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "A New Generative Model?"
-excerpt: "initial thoughts about a new formalism for generative models."
+excerpt: "Initial thoughts about a new formalism for generative models."
 date:   2019-10-25 11:00:00
 mathjax: true
 ---
