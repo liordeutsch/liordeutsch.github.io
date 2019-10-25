@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "My Failed Attempt to Crack RSA"
-excerpt: "  "
+excerpt: "I describe a hypothetical machine that I came up with years ago, which I thought could help crack RSA (I was very wrong). The machine is based on electric charges moving in a magnetic field."
 date:   2019-10-14 13:00:00
 mathjax: true
 ---
