@@ -27,11 +27,11 @@ Ideally, we would want that $$P(X \in \omega) = P(G_{\theta}(Z) \in \omega)$$ fo
 
 The relation $$\forall \omega, P(X \in \omega) = P(G_{\theta}(Z) \in \omega)$$ imposes infinitely many constraint equations - one for each $$\omega$$. We can relax it, though, into a single equation: Instead of $$\forall \omega$$, let's take some probability distribution $$p_{\Omega}(\omega)$$ over subsets.  $$\Omega$$ is a "random  variable" whose values are subsets of $$\mathbb{R}^d$$, and $$p_{\Omega}(\omega)$$  is a function $$2^{\mathbb{R}^d} \rightarrow \mathbb{R}$$ that associates a probabilit density for each subset. We now demand that the equality holds under expectation:
 
-$$\underset{\omega \sim p_{\Omega}}{\mathbb{E}} \ P(X \in \omega) = \underset{\omega \sim p_{\Omega}}{\mathbb{E}} \  P(G_{\theta}(Z) \in \omega)$$
+$$\underset{\Omega \sim p_{\Omega}}{\mathbb{E}} \ P(X \in \Omega) = \underset{\Omega \sim p_{\Omega}}{\mathbb{E}} \  P(G_{\theta}(Z) \in \Omega)$$
 
 Notice that we can also write this as:
 
-$$\underset{\omega \sim p_{\Omega}}{\mathbb{E}} \ \underset{x \sim p_X}{\mathbb{E}} \ \mathbf{1}_{x \in \omega} = \underset{\omega \sim p_{\Omega}}{\mathbb{E}} \ \underset{z \sim p_Z}{\mathbb{E}} \  \mathbf{1}_{G_{\theta}(z) \in \omega}$$
+$$\underset{\Omega \sim p_{\Omega}}{\mathbb{E}} \ \underset{X \sim p_X}{\mathbb{E}} \ \mathbf{1}_{X \in \Omega} = \underset{\Omega \sim p_{\Omega}}{\mathbb{E}} \ \underset{Z \sim p_Z}{\mathbb{E}} \  \mathbf{1}_{G_{\theta}(Z) \in \Omega}$$
 
 where $$\mathbf{1}_{c}$$ is the indicator function, which equals $$1$$ if condition $$c$$ holds and $$0$$ otherwise.
 
@@ -47,27 +47,27 @@ We want to be able to practically represent a subset $$\omega$$ and a "random va
 
 We can represent $$\omega$$ using a neural network. Take a neural network $$g_{\varphi}(x)$$ with weights $$\varphi$$ that takes as input a vector $$x \in \mathbb{R}^d$$ and returns a scalar number. We can say that $$g_{\varphi}(x)$$ is a representation of the subset $$\omega_{\varphi}=\{ x : g_{\varphi}(x) > 0 \}$$. This shows that a neural network represents a subset of $$\mathbb{R}^d$$. We can also claim that the correspondence works the other way: every subset can be represented by some neural network $$g_{\varphi}(x)$$ (for this claim, we need to assume that we are dealing with large capacity neural networks $$g_{\varphi}$$, and that we are interested in regular enough subsets $$\omega$$, and we need to use the universal approximator theorem).
 
-To represent $$\Omega$$, we can use [hypernetworks](https://arxiv.org/abs/1801.01952). A hypernetwork is a neural network which takes as input some random vector, and outputs weights for another neural network (with a known and fixed architecture). We denote the hypernetwork with $$H_{\psi}(u)$$, where $$\psi$$ are its weights, and $$u$$ is its input. We feed $$H_\psi$$ with a random vector $$U$$ drawn from a simple distribution, and obtain $$\Phi=H_\psi(U)$$. The hypernetwork induces some distribution over weight vectors. In our case, the random vector $$\Phi$$ can be seen as a representation of $$\Omega$$. We can sample from $$\Phi$$ to obtain a weight vector $$\varphi$$,  plug it into $$g_\varphi (x)$$ to get a representation of a subset $$\omega_{\varphi}$$. 
+To represent $$\Omega$$, we can use [hypernetworks](https://arxiv.org/abs/1801.01952). A hypernetwork is a neural network which takes as input some random vector, and outputs weights for another neural network (with a known and fixed architecture). We denote the hypernetwork with $$H_{\psi}(u)$$, where $$\psi$$ are its weights, and $$u$$ is its input. We feed $$H_\psi$$ with a random vector $$U$$ drawn from a simple distribution $$p_{U}$$, and obtain $$\Phi=H_\psi(U)$$. The hypernetwork induces some distribution over weight vectors. In our case, the random vector $$\Phi$$ can be seen as a representation of $$\Omega$$. We can sample from $$\Phi$$ to obtain a weight vector $$\varphi$$,  plug it into $$g_\varphi (x)$$ to get a representation of a subset $$\omega_{\varphi}$$. 
 
 
 
 ### The objective equation
 
-In the equation above, we can replace $$\mathbf{1}_{x \in \omega}$$ with $$\mathbf{1}_{g_\varphi (x) > 0}$$. To make things nicer, we can add a sigmoid to the output of $$g_{\varphi} $$ ,  and we can use soft (fuzzy) association and replace $$\mathbf{1}_{g_\varphi (x) > 0}$$ simply with $$g_{\varphi}(x) $$.
+In the equation above, we can replace $$\mathbf{1}_{X \in \Omega}$$ with $$\mathbf{1}_{g_\varphi (X) > 0}$$. To make things nicer, we can add a sigmoid to the output of $$g_{\varphi} $$ ,  and we can use soft (fuzzy) association and replace $$\mathbf{1}_{g_\varphi (X) > 0}$$ simply with $$g_{\varphi}(X) $$.
 
-We also need to replace $$\omega \sim p_{\Omega}$$ with $$\varphi \sim p_{\Phi}$$, where $$p_{\Phi} (\varphi)$$ is a distribution over weights $$\varphi$$, induced by the hypernetwork.
+We also need to replace $$\Omega \sim p_{\Omega}$$ with $$\Phi \sim p_{\Phi}$$, where $$p_{\Phi} (\varphi)$$ is a distribution over weights $$\varphi$$, induced by the hypernetwork.
 
 With these replacements, the equation above turns into:
 
-$$\underset{\varphi \sim p_{\Phi}}{\mathbb{E}} \ \underset{x \sim p_X}{\mathbb{E}} \ g_{\varphi}(x) = \underset{\varphi \sim p_{\Phi}}{\mathbb{E}} \ \underset{z \sim p_Z}{\mathbb{E}} \  g_{\varphi}(G_{\theta}(z))$$
+$$\underset{\Phi \sim p_{\Phi}}{\mathbb{E}} \ \underset{X \sim p_X}{\mathbb{E}} \ g_{\Phi}(x) = \underset{\Phi \sim p_{\Phi}}{\mathbb{E}} \ \underset{Z \sim p_Z}{\mathbb{E}} \  g_{\Phi}(G_{\theta}(Z))$$
 
 Reorganizing it becomes:
 
-$$\underset{\varphi \sim p_{\Phi}}{\mathbb{E}} \left[ \ \underset{x \sim p_X}{\mathbb{E}}  \ g_{\varphi}(x)-\underset{z \sim p_Z}{\mathbb{E}}g_{\varphi}(G_{\theta}(z)) \right]=0$$
+$$\underset{\Phi \sim p_{\Phi}}{\mathbb{E}} \left[ \ \underset{X \sim p_X}{\mathbb{E}}  \ g_{\Phi}(X)-\underset{Z \sim p_Z}{\mathbb{E}}g_{\Phi}(G_{\theta}(z)) \right]=0$$
 
 The hypernetwork $$H_\psi$$ does not explicitly appear in this equation, so I add it in:
  
-$$\underset{u \sim p_{U}}{\mathbb{E}} \left[ \ \underset{x \sim p_X}{\mathbb{E}}  \ g_{H_{\psi}(u)}(x)-\underset{z \sim p_Z}{\mathbb{E}}g_{H_{\psi}(u)}(G_{\theta}(z)) \right]=0$$
+$$\underset{U \sim p_{U}}{\mathbb{E}} \left[ \ \underset{X \sim p_X}{\mathbb{E}}  \ g_{H_{\psi}(U)}(X)-\underset{Z \sim p_Z}{\mathbb{E}}g_{H_{\psi}(U)}(G_{\theta}(Z)) \right]=0$$
 
 I refer to either of the last two equations as the **objective equation**. (I was careful not to call them an **objective function**, since this is not a function we want to minimize, but rather an equation that we want to be satisfied).
 
@@ -84,7 +84,13 @@ I'm not sure yet how to proceed from here. Here are some notes:
 
 * Perhaps what we want is something like this? 
 
- $$\underset{\theta}{\min}\underset{\psi}{\max}{\underset{u \sim p_{U}}{\mathbb{E}} \left[ \left( \ \underset{x \sim p_X}{\mathbb{E}}  \ g_{H_{\psi}(u)}(x)-\underset{z \sim p_Z}{\mathbb{E}}g_{H_{\psi}(u)}(G_{\theta}(z)) \right)^2\right]}$$
+ $$\underset{\theta}{\min}\underset{\psi}{\max}{\underset{U \sim p_{U}}{\mathbb{E}} \left[ \left( \ \underset{X \sim p_X}{\mathbb{E}}  \ g_{H_{\psi}(U)}(X)-\underset{Z \sim p_Z}{\mathbb{E}}g_{H_{\psi}(U)}(G_{\theta}(Z)) \right)^2\right]}$$
+ 
+ or even simply this? (which makes it very similar to Wasserstein GAN):
+ 
+ $$\underset{\theta}{\min}\underset{\psi}{\max}{\underset{U \sim p_{U}}{\mathbb{E}} \left[ \ \underset{X \sim p_X}{\mathbb{E}}  \ g_{H_{\psi}(U)}(X)-\underset{Z \sim p_Z}{\mathbb{E}}g_{H_{\psi}(U)}(G_{\theta}(Z)) \right]}$$
+ 
+ I wouldn't be surprised if one can claim that the optimal choice of $$\psi$$ here is such that $${H_{\psi}(U)}$$ is deterministic, which would make this essentially equivalent to Wasserstein.
 
 * Another idea is that we don't use a loss function, but instead try to directly solve the equation using something like Newton-Raphson method. However, this doesn't apply here since the number of equations here (which is one) is different than the number of parameters (the dimension of $$\theta$$). This is a symptom of a larger problem: Since we reduced the number of equations to being only 1, then in general the manifold of the solutions to the equation is very large, and not all of these solutions are necessarily good solutions in terms of our final goal. I hope that we can find a way to choose  $$p_{\Phi}$$ which ensures that there is only a single, good solution (or that all solutions are good). 
 * Here are some open issues:
