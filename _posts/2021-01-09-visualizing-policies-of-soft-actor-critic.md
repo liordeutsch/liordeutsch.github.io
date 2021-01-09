@@ -7,8 +7,6 @@ date:   2021-01-09 08:00:00
 mathjax: true
 ---
 
-# Visualizing Policies of Soft Actor Critic
-
 *The code associated with this post is [here](https://github.com/sliorde/sac_gridworld).*
 
 In reinforcement learning (RL), the typical goal is to find a policy $$\pi(a \vert s)$$, that is, a probability distribution for an agent's action $$a$$ given an observed state $$s$$,  such that the mean total reward $$J(\pi)$$ is maximal:
@@ -36,23 +34,23 @@ More specifically, to find the optimal policy, we start by defining an initial Q
    1. Calculate next state $$s'=T(s,a)$$  (where $$T$$ is the deterministic state transition function).
    2.  $$Q(s,a) \leftarrow r(s,a)+\sum\limits_{a'}\pi(a' \vert s')Q(s',a')+\alpha\mathcal{H}[\pi(\cdot \vert s')]$$
 
-The paper proves that, if we repeat the steps above many times, we obtain a policy $$\pi(a|s)$$ that optimizes $$J_{\text{SAC}}(\pi)$$ (under some conditions, which easily hold in our finite case; there is some subtlety regarding the discount factor, by it is outside our scope).
+The paper proves that, if we repeat the steps above many times, we obtain a policy that optimizes $$J_{\text{SAC}}(\pi)$$ (under some conditions, which easily hold in our finite case; there is some subtlety regarding the discount factor, by it is outside our scope).
 
 The goal of this post is not to apply the SAC algorithm. Therefore, we do not talk about the details of the algorithm. The goal is to visualize optimal policies under the SAC objective. Therefore, we let ourselves use the precise policy iterations, using the known environment transition function and reward function, without any approximations, and we know that this will converge to a true optimal policy.
 
 Our environment will be a rectangular gridworld, as shown in the figure below. The width will be 21 pixels, and the height will be 30 pixels. The agent always starts at the bottom center pixel, and tries to get to the  target at the top center pixel. On each time step, the agent can only move to one of the four adjacent pixels. Therefore, the action set is of size 4. The agent fully knows its position, which comprises the state. If the agent attempts to move into a wall, then it stays in its current position without moving. The gridworld also contains a non-traversable area of width 7 and height 10 pixels, in the middle, colored in black. The goal of the agent is to find the fastest way to get from the starting position to the target pixel at the top center. To substantiate this goal we give a constant negative reward of -1 for each action the agent takes.  
 
-<img src="/assets/gridworld.png" style="zoom:18%;" />
+![](/assets/gridworld.png){:height="30%" width="30%"}
 
 Before we start visualizing policies, let's think about the optimal policies of the environment, forgetting about entropy. First of all, since the environment is deterministic, we can talk about optimal trajectories. Here are three different optimal trajectories:
 
- <img src="/assets/three_traj.png" style="zoom:50%;" />
+ ![](/assets/three_traj.png){:height="80%" width="80%"}
 
 We can see that there are many more optimal trajectories. All other trajectories with the same length, which take us from the initial position to the target pixel, are equally optimal. The number of optimal trajectories is large since our environment posses symmetries, for example: in almost all states, the sequence of actions LEFT,UP gives an identical outcome as the sequence UP,LEFT. Having multiple optimal trajectories means that we have multiple deterministic optimal policies, and this in turn means that we have infinitely many optimal non-deterministic policies. Take any mixture of optimal deterministic policies, with any mixture weights (which can depend on the state), and you get a non-deterministic policy which is also optimal.
 
 An interesting question is: Among all optimal policies, which policy will we obtain using the policy iteration explained above, in the limit $$\alpha \rightarrow 0$$, where the entropy is not important? To test this, we take the value of $$\alpha=10^{-12}$$ , and apply the policy iterations until convergence. Here is the resulting optimal policy:
 
-<img src="/assets/small_alpha.png" style="zoom:18%;" />
+![](/assets/small_alpha.png){:height="80%" width="80%"}
 
 First, let's explain what this figure shows. It shows the entire policy. On each pixel, there are four arrows, representing the four allowed actions. The color intensity of the arrow represent the probability of the corresponding action under the policy. When an arrow does not show, this means that it has zero probability. The darker the arrow is, the higher the probability it has.
 
@@ -60,25 +58,25 @@ Looking at the policy, we see that it is mostly deterministic. However, in some 
 
 Before we make $$\alpha$$ higher, let's see what happens in the absence of symmetry. To break the symmetry, we change the reward function. Instead of having a constant reward of -1 for each action in all states, we now make the reward depend on the state deterministically (but it still does not depend on the action). We choose some arbitrary reward function, whose reward is in the range [-5, -1]. The following figure shows the environment with the reward function represented as a heat map, where hotter colors represent rewards which are more negative. The figure also shows the optimal policy, for the same small value of  $$\alpha=10^{-12}$$.
 
-<img src="/assets/small_alpha_var.png" style="zoom:18%;" />
+![](/assets/small_alpha_var.png){:height="80%" width="80%"}
 
 Now we see that we get a fully deterministic policy, not surprisingly. Here is the optimal trajectory:
 
-<img src="/assets/small_alpha_var_traj.png" style="zoom:18%;" />
+![](/assets/small_alpha_var_traj.png){:height="80%" width="80%"}
 
 One last thing, before we start to increase $$\alpha$$: It is illuminating to see the policy after each policy iteration step. That is, to view the optimization process of the policy. Here is a video of this process for the symmetrical case, where all rewards are -1, with $$\alpha=10^{-12}$$:
 
-<img src="/assets/small_alpha_opt.gif" style="zoom:70%;" />
+![](/assets/small_alpha_opt.gif){:height="80%" width="80%"}
 
 The video shows both the policy, and the most likely trajectory induced by the policy, after each policy iteration. Notice how the policy converges most quickly near the target pixel on the top of the gridworld, and from there gradually to the rest of the gridworld. To understand this, we should notice that in the Bellman backup step of the policy iteration, we use the next state's value. This is not quite true for the final state, which is the target pixel. In this state, there is no next state. Therefore, one single Bellman update is required to get an accurate Q value in this case, and the Q value will not change hereafter. This makes the neighboring pixels to also converge faster, and so on. In fact, what we see here is dynamic programming, and it could be made more efficient if we defer updating pixels which are not near the target pixel, until it is "their turn".
 
 Ok, so now let's see what happens when we increase $$\alpha$$, thereby giving more importance to the entropy (the SAC paper presents a procedure for optimizing $$\alpha$$ using gradients, subject to a constraint on the average entropy. This does not concern this post). We will start with the symmetrical case, where the reward is constant. The following video shows the optimal policy, and the most likely trajectory, as we increase $$\alpha$$. 
 
-<img src="/assets/vs_alpha.gif" style="zoom:70%;" />
+![](/assets/vs_alpha.gif){:height="80%" width="80%"}
 
 As expected, we see that increasing $$\alpha$$ makes the optimal policy less and less deterministic. The final value of $$\alpha$$ gives rise to a policy that doesn't care so much about the reward anymore, only about high entropy. Another interesting observation is that, for a wide range of values of $$\alpha$$, the optimal policy is unchanged (note that for each $$\alpha$$ we start with a new random initialization of the Q function). Another way to see this is too look at the following graph, which shows the accumulated discounted entropy over the most likely trajectory of the optimal policy for each value of $$\alpha$$: 
 
-<img src="/assets/entropy_vs_alpha.png" style="zoom:72%;" />
+![](/assets/entropy_vs_alpha.png){:height="72%" width="72%"}
 
 Ignoring the wiggling for small values of $$\alpha$$, where results could be less accurate due to numeric errors, we see that the general trend is that entropy increases with $$\alpha$$. But we see a range of values of $$\alpha$$ , spanning more than 5 orders of magnitude, where the entropy is constant. This might be counter intuitive. We might expect that every small increase in $$\alpha$$ will allow the policy to increase its entropy a bit, for the price of a slightly smaller total reward. So why don't we see this effect for $$\alpha$$ in the range $$[10^{-6},10^{-1}]$$? 
 
@@ -86,11 +84,11 @@ I don't have a good answer. I suspect that applying reasonings from the physics 
 
 My vague explanation asserts that the symmetries play an important role, because it is these symmetries that gives rise to the multitude of optimal deterministic policies. It is therefore interesting to check what happens in the non-symmetrical case, where we use a non-constant reward. So first, let's look at the video of the optimal policy per $$\alpha$$:
 
-<img src="/assets/vs_alpha_var.gif" style="zoom:70%;" />           
+![](/assets/vs_alpha_var.gif){:height="80%" width="80%"}           
 
 And here is the corresponding graph of the accumulated discounted entropy over the most likely trajectory of the optimal policy for each value of $$\alpha$$:
 
-<img src="/assets/entropy_vs_alpha_var.png" style="zoom:72%;" /> 
+![](/assets/entropy_vs_alpha_var.png){:height="72%" width="72%"} 
 
 The graph shows a more gradual change of entropy as we increase $$\alpha$$, which is on par with the theory I suggested above. There is a jump in entropy for $$\alpha\approx0.7$$, which is where the entropy becomes more dominant than the reward. This is the point where the trajectories become infinitely long, and their total is in fact the sum of an infinite discounted convergent series.  
 
@@ -98,11 +96,11 @@ Looking at the video above, the changes in policy seem quite minuscule as we inc
 
 One last interesting exercise is to try and understand an optimal policy. Let's look at the symmetrical case, with $$\alpha=10^{-3}$$. Here is the optimal policy:
 
-<img src="/assets/medium_alpha.png" style="zoom:18%;" />
+![](/assets/medium_alpha.png){:height="80%" width="80%"}
 
 And here, we zoom into one part of it:
 
-<img src="/assets/medium_alpha_zoom.png" style="zoom:18%;" />
+![](/assets/medium_alpha_zoom.png){:height="80%" width="80%"}
 
 We see that in the column just to the right of the black zone, the policy always makes the deterministic decisions of UP. The reason is that, as we explained above, the policy is a mixture of optimal deterministic policies, and all of them take the same actions in these positions. What about the column on step further to the right? We see that here the policy does not take deterministic actions, and it is a mixture of the two possible actions allowed by optimal deterministic policies. But the mixture is not with equal weight. The action UP has higher probability then the action LEFT. How can this be explained? Wouldn't we get a higher entropy for the uniform distribution over the two actions? Sure, we would get a higher entropy, but this would be a greedy policy. In RL, we care about a cumulative return, not a greedy one. And in this case, if we made the probability for LEFT higher, then we would make the agent more likely to move to the position where the action is a deterministic UP and has zero entropy. 
 
