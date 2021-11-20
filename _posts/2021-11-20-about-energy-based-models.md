@@ -1,13 +1,13 @@
 ---
 layout: post
 comments: true
-title:  "About Energy Based Models"
-excerpt: "I present the formulation of deep energy based models."
+title:  "About Energy-Based Models"
+excerpt: "I present the formulation of deep energy-based models."
 date:   2021-11-20 08:00:00
 mathjax: true
 ---
 
-This is a summary of the formulation of deep energy based models (EBMs). The emphasis is on the formulation, and not on specific examples of implementations/applications. This is not an exhaustive overview of all types of EBMs. 
+This is a summary of the formulation of deep energy-based models (EBMs). The emphasis is on the formulation, and not on specific examples of implementations/applications. This is not an exhaustive overview of all types of EBMs. 
 
 This review assumes basic knowledge of probability theory, as well as basic knowledge of the following concepts: Maximum likelihood, neural networks (NNs), stochastic gradient descent (SGD), bias of an estimator. The review mentions the following terms as well, but prior knowledge of them is not essential:  Langevin MCMC. 
 
