@@ -90,7 +90,9 @@ This ELBO $$\mathcal{L}(\theta, \varphi)$$ that we've just seen is exactly the o
 For the approximate posterior $$q_\varphi(z\vert x)$$, VAEs typically use a normal distribution with an isotropic covariance whose mean and covariance are given by the output of a NN with parameters $$\varphi$$ and input $$x$$. This NN is called the *encoder*, for reasons that will become apparent later. Other, more expressive alternatives for the encoder exist, such as a using a normalizing flow NN or a hierarchical version which samples $$z$$ in a multistep process that depends on $$x$$.
 
 To summarize, a typical case is: 
+
 $$p_\theta(z)=\mathcal{N}(z;0,I)$$   ,
+
 $$p_\theta(x\vert z)=\mathcal{N}(x;\mu_\theta(z),\sigma^2I)$$    ,
 
 $$q_{\varphi}(z\vert x)=\mathcal{N}(z;\mu_\varphi(x),\sigma_\varphi^2(x)I)$$   ,
