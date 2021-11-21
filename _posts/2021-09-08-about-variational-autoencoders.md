@@ -96,6 +96,7 @@ $$p_\theta(z)=\mathcal{N}(z;0,I)$$   ,
 $$p_\theta(x\vert z)=\mathcal{N}(x;\mu_\theta(z),\sigma^2I)$$    ,
 
 $$q_{\varphi}(z\vert x)=\mathcal{N}(z;\mu_\varphi(x),\sigma_\varphi^2(x)I)$$   ,
+
 where $$\sigma$$ is a constant (hyperparameter), and the following are NNs: $$\mu_\theta(z)$$, $$\mu_\varphi(x)$$, $$\sigma_\varphi(x)$$. (The latter NN returns a scalar which equals the standard deviation along the diagonal of  the diagonal covariance matrix). (In case you were wondering, the notation $$\mathcal{N}(y;\mu,\Sigma)$$ is a shorthand for writing the PDF of a normal vector with mean vector $$\mu$$ and covariance matrix $$\Sigma$$, evaluated at point $$y$$).
 
 ### Reparameterization Trick
