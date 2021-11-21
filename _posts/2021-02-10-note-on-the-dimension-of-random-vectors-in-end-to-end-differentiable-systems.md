@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "A Note on the Dimension of Random Vectors in End-to-End Differentiable Systems"
-excerpt: "A short argument showing that when optimizing a stochastic differentiable system with SGD, the source of randomness should be of the small dimension possible."
+excerpt: "A short argument showing that when optimizing a stochastic differentiable system with SGD, the source of randomness should be of as small a dimension possible."
 date:   2021-02-10 08:00:00
 mathjax: true
 ---
