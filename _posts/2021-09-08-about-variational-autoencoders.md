@@ -117,7 +117,7 @@ Putting this all together, here is the training process of VAE (in the typical c
 
 1. Choose a size (=number of dimensions) for the latent vector $$z$$.
 2. Choose a NN architecture for the decoder $$\mu_\theta(\cdot)$$, whose input will be of the same size as the latent vector $$z$$ and output as the same size of the data samples $$x$$.
-3. Choose a NN architecture for the encoder $$\mu_\varphi(\cdot)$$, $$\sigma_\varphi(\cdot)$$ (this is either two separate NNs or one NN with two types of outputs), whose input will be of the same size as the data samples $$x$$ and whose two outputs are each the same size of the latent vector $$z$$.
+3. Choose a NN architecture for the encoder $$\mu_\varphi(\cdot)$$, $$\sigma_\varphi(\cdot)$$ (this should be seen as a NN with two outputs), whose input will be of the same size as the data samples $$x$$ and whose first output is of the same size as the latent vector $$z$$, and the second output is a scalar.
 4. Initialize random values for $$\theta$$ and $$\varphi$$.
 2. Repeat many times (the calculations should be done in an autograd framework, such as Tensorflow or Pytorch, that performs backpropagation through the entire computational graph):
    1. Take a random batch of training data $$x_1,x_2,...,x_m$$
