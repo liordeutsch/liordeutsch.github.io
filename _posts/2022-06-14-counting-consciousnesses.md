@@ -7,7 +7,7 @@ date:   2022-06-12 19:00:00
 mathjax: true
 ---
 
-In this post, I will share preliminary thoughts that I have about consciousness, and in particular counting consciousnesses. The TL;DR is that (maybe) a single brain contains many different, coexisting but distinct consciousnesses. And if this is true, one surprising corollary is that spurm whales might have exponentially more consciousnesses than all other animals combined, and therefore morally we ought to focus mostly on reducing their suffering. 
+In this post, I will share preliminary thoughts that I have about consciousness, and in particular counting consciousnesses. The TL;DR is that (maybe) a single brain contains many different, coexisting but distinct consciousnesses. And if this is true, one surprising corollary is that sperm whales might have exponentially more consciousnesses than all other animals combined, and therefore morally we ought to focus mostly on reducing their suffering. 
 
 This theory is is still half-baked, and I'd appreciate criticism and comments.
 
