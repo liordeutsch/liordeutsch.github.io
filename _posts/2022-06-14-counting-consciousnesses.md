@@ -74,4 +74,6 @@ One possible implication of the multiple-consciousnesses-per-brain hypothesis is
  
  * I understand that we need to be more careful in how we define the *distinctness* of two consciousnesses. Also, I did not take into account the option of multiple consciousnesses "merging" into one when they come into contact and share information with each other. 
  
+ * In the sperm whale implication, I did not consider the difference in the "amount" of consciousnesses between whales and other animals. I believe that the exponential factor would dwarf any other factor, which depends on a reasonable measure of consciousnesses.
+ 
  * Please do not consider me as an advocate of this theory. It is not my view. It is just a theory, and I do not claim to support it over the alternatives.
